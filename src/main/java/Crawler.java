@@ -19,6 +19,9 @@ public class Crawler {
     private static boolean isReported = false;
     private static String udid;
     private static String outputDir;
+    
+    private static String defaultConfigFile = "config.yml";
+    private static String defaultUdid = "9e979099";	//ae5c3047  RKK0218515000915 9e979099
 
     private static class CtrlCHandler extends Thread{
         @Override
@@ -120,15 +123,21 @@ public class Crawler {
             configFile = configFile.trim();
             log.info(configFile);
         }else{
-            log.info("Please provide config file");
-            return;
+//            log.info("Please provide config file");
+//            return;
+
+            configFile = System.getProperty("user.dir") + File.separator + defaultConfigFile ;
+            configFile = configFile.trim();
+            log.info("使用默认配置文件："+configFile);
         }
 
         if( commandLine.hasOption("u") ) {
             udid = commandLine.getOptionValue('u');
         }else{
-            log.info("Please provide device serial");
-            return;
+//            log.info("Please provide device serial");
+//            return;
+        	log.info("使用默认手机："+defaultUdid);
+        	udid = defaultUdid;
         }
 
         if( commandLine.hasOption("o") ) {
@@ -243,7 +252,7 @@ public class Crawler {
 
             try {
                 //等待App完全启动,否则遍历不到元素
-                Driver.sleep(15);
+                Driver.sleep(5);
 
                 if (commandLine.hasOption("e") && Util.isAndroid()) {
                     PerfUtil.writeDataToFileAsync(writeToDB);

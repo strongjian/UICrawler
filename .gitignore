@@ -9,3 +9,9 @@ logs/
 log/
 target/
 crawler_output/
+.classpath
+.project
+.settings/
+2.26/
+*.jar
+config*.yml

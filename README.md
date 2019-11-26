@@ -91,8 +91,12 @@ appium --session-override -p 4723
 ```
 
 ### 5.1 运行元素遍历(必须有yml配置文件)
-```aidl
-java -jar UICrawler.jar -f config.yml -u udid -t 4723
+```aidl 
+java -jar UICrawler.jar -f config.yml -u RKK0218515000915 -t 4723
+java -jar UICrawler.jar -f config.yml -u ae5c3047 -t 4723
+java -jar UICrawler.jar -f config.yml -u 9e979099 -t 4723
+java -jar UICrawler.jar -f config.yml -u RKK0218515000915 -s 172.16.12.15 -t 4723
+
 -u 指定设备udid
 -t 指定appium server的端口（此项为可选项，默认值是4723)
 ```

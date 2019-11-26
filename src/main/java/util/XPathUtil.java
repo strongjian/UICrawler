@@ -1,7 +1,13 @@
 package util;
 
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.PerformsTouchActions;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.offset.PointOption;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.touch.TouchActions;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -12,6 +18,7 @@ import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.List;
+import io.appium.java_client.PerformsTouchActions;
 
 
 public class XPathUtil {
@@ -247,7 +254,8 @@ public class XPathUtil {
             clickBuilder.append(ConfigUtil.getStringValue(ConfigUtil.ANDROID_CLICK_XPATH_HEADER));//@clickable="true"
             if(androidBottomBarID != null) {
                 //tabBuilder = new StringBuilder("//*[@resource-id=\"" + androidBottomBarID + "\"]/descendant-or-self::*[@clickable=\"true\"]");
-                tabBuilder = new StringBuilder("//*[" + androidBottomBarID +"]/descendant-or-self::*[@clickable=\"true\"]");
+//                tabBuild er = new StringBuilder("//*[" + androidBottomBarID +"]/descendant-or-self::*[@clickable=\"true\"]");
+                tabBuilder = new StringBuilder("//*[" + androidBottomBarID +"]");
                 clickBuilder.append(" and not(ancestor-or-self::*[" +androidBottomBarID +"])");
             }
 
@@ -395,9 +403,15 @@ public class XPathUtil {
             }
 
             //Sometimes, UIA2 will throw StaleObjectException Exception here
-            int x = elem.getCenter().getX();
-            int y = elem.getCenter().getY();
-
+//            int x = elem.getCenter().getX();
+//            int y = elem.getCenter().getY();
+            String bounds = elem.toString();	//@bounds="[636,1586][714,1639]
+            int start = bounds.indexOf("@bounds=\"[");
+            int end  = bounds.indexOf("][");
+            String leftTop = bounds.substring(start+10,end); //636,1586
+            int split = leftTop.indexOf(",");
+            int x = Integer.parseInt(leftTop.substring(0, split));
+            int y = Integer.parseInt(leftTop.substring(split+1));
             pic = PictureUtil.takeAndModifyScreenShot(x*scale,y*scale);
 
             //String appName;
@@ -405,7 +419,10 @@ public class XPathUtil {
             repoStep.append("CLICK : " + x + "," + y + "\n");
 
             clickFailureElementList.add(elem.toString());
-            elem.click();
+
+            WebDriver driver = elem.getWrappedDriver();
+            new TouchAction((PerformsTouchActions)driver).tap(PointOption.point(x,y)).perform();
+//          elem.click();
             clickFailureElementList.remove(elem.toString());
 
             log.info("------------------------CLICK " + clickCount + "  X: " + x + " Y: " + y +" --------------------------");
@@ -897,7 +914,7 @@ public class XPathUtil {
                     try {
                         triggerElementAction(xpath, action, value);
                     }catch (Exception e){
-                        log.error("Element " + xpath + "is not found.");
+                        log.error("Element " + xpath + " is not found.");
                     }
                 }
 
@@ -913,6 +930,9 @@ public class XPathUtil {
     }
 
     private static void triggerElementAction(String xpath, String action, Object value){
+    	if (value == "null")
+    		value = "1";
+
         MobileElement element = Driver.findElement(By.xpath(xpath));
 
         log.info("Trigger element : " + xpath + " action : " + action + " value : " + value );
