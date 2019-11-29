@@ -3,6 +3,8 @@ import org.apache.commons.cli.*;
 import org.apache.commons.collections.map.ListOrderedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXParseException;
+
 import util.*;
 
 import java.io.File;
@@ -35,14 +37,14 @@ public class Crawler {
 
             if(!isReported) {
                 log.info("Handling Ctrl + C shut down event...");
-                executeTask();
+                executeTask(false);
                 log.info("Everything is done. Both video and report are generated.");
             }
         }
     }
 
-    private static void executeTask(){
-        generateReport();
+    private static void executeTask(boolean testResult){
+        generateReport(testResult);
 
         if (ConfigUtil.isGenerateVideo()) {
             generateVideo();
@@ -57,6 +59,7 @@ public class Crawler {
 
     @SuppressWarnings("unchecked")
     public static void main(String []args) throws Exception{
+    	boolean testResult = true;
         String version = "2.26 ---Feb/23/2019";
 
         CommandLineParser parser = new DefaultParser( );
@@ -250,6 +253,7 @@ public class Crawler {
 
             Runtime.getRuntime().addShutdownHook(new CtrlCHandler());
 
+            String pageSource = Driver.getPageSource();
             try {
                 //等待App完全启动,否则遍历不到元素
                 Driver.sleep(5);
@@ -264,9 +268,7 @@ public class Crawler {
 
                 //初始化Xpath内容
                 XPathUtil.initialize(udid);
-
-                String pageSource = Driver.getPageSource();
-
+                
                 if (commandLine.hasOption("m")) {
                     //开始Monkey测试
                     log.info("----------------Run in monkey mode-----------");
@@ -283,10 +285,16 @@ public class Crawler {
 
                 log.info("------------------------------Complete testing. Please refer to report.html for detailed information.----------------");
                 log.info("------------------------------Press Ctrl + C to generate video file and report.----------------");
-            } catch (Exception e) {
+            } catch (SAXParseException e) {
                 e.printStackTrace();
                 log.error("------------------------------ERROR. Testing stopped unexpectedly!!!!----------------");
-            }
+                log.error("pageSource："+pageSource);
+                testResult = false;
+            }  catch (Exception e) {
+                e.printStackTrace();
+                log.error("------------------------------ERROR. Testing stopped unexpectedly!!!!----------------");
+                testResult = false;
+            } 
 
             Driver.sleep(5);
 
@@ -296,7 +304,7 @@ public class Crawler {
                 Driver.stopPerfRecordiOS();
             }
 
-            executeTask();
+            executeTask(testResult);
 
             if(isMonkeyMode()){
                 log.info("Complete testing in monkey mode");
@@ -406,7 +414,7 @@ public class Crawler {
         }
     }
 
-    private static void generateReport(){
+    private static void generateReport(boolean testResult){
         log.info("Method : generateReport()");
 
         int index = 0;
@@ -430,6 +438,11 @@ public class Crawler {
         }else{
             summaryMap.put("测试类型 - Test type","UI元素遍历");
         }
+        
+        if (testResult == true)
+        	summaryMap.put("测试结果 - Test Result", "成功完成");
+        else
+        	summaryMap.put("测试结果 - Test Result", "异常退出");
 
         if(crashCount > 0) {
             log.info("Crash count is : " + crashCount);

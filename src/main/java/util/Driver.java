@@ -37,7 +37,7 @@ public final class Driver {
     public static AppiumDriver driver;
     private static int deviceHeight;
     private static int deviceWidth;
-    private static final int APP_START_WAIT_TIME = 20;
+    private static final int APP_START_WAIT_TIME = 10;
     private static int screenshotCount = 0;
 
     public static void startPerfRecordiOS(){
@@ -82,7 +82,7 @@ public final class Driver {
     }
 
     public static void appRelaunch(){
-        log.info("Restart app...");
+        log.info("======================================================Restart app...");
 
         try {
             //TODO: driver.quit() is needed or not?
@@ -132,7 +132,12 @@ public final class Driver {
         return  takeScreenShot(getScreenShortName());
     }
 
-    public static String takeScreenShot(String screenShotName) {
+    /**
+     * 抓屏，屏蔽异常
+     * @param screenShotName
+     * @return 返回文件路径，异常返回null
+     */  
+    public static String takeScreenShot(String screenShotName){
         //等待1秒再截图，不然界面还在变化，载图不是完整初始化后的页面
         sleep(1);
 
@@ -173,11 +178,12 @@ public final class Driver {
                     delFile.delete();
                 }
             }
+            return  screenShotName;
         } catch (Exception e) {
             log.info("Fail to take screenshot!");
+            e.printStackTrace();
+            return null;
         }
-
-        return  screenShotName;
     }
 
     public static String getPageSource(){

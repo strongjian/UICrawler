@@ -86,17 +86,21 @@ public class PictureUtil {
     static String takeAndModifyScreenShot(List<Point> pointList,int radius,String ext){
 
         String img = Driver.takeScreenShot();
-        drawPoint(img,pointList,radius,radius,Color.RED);
-        File file = new File(img);
-        if(pointList.size() > 1) {
-            img = img.replace(".png", "_" + ext + ".png");
-        }else{
-            Point point = pointList.get(0);
-            img = img.replace(".png", "_X-" + point.x + "-Y-" + point.y + "-" + ext + ".png");
-        }
-        File newFile = new File(img);
-        file.renameTo(newFile);
-        log.info("Screen shot is renamed to: " + newFile.getAbsolutePath());
+        if (img !=null) {
+            drawPoint(img,pointList,radius,radius,Color.RED);
+            File file = new File(img);
+            if(pointList.size() > 1) {
+                img = img.replace(".png", "_" + ext + ".png");
+            }else{
+                Point point = pointList.get(0);
+                img = img.replace(".png", "_X-" + point.x + "-Y-" + point.y + "-" + ext + ".png");
+            }
+            File newFile = new File(img);
+            file.renameTo(newFile);
+            log.info("Screen shot is renamed to: " + newFile.getAbsolutePath());        	
+        }else
+            log.info("Screen shot is null: ignore rename!"); 	
+            
         return img;
     }
 

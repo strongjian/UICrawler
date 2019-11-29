@@ -33,7 +33,8 @@ public class XPathUtil {
     private static boolean stop = false;
     private static String appName;
     private static String appNameXpath;
-    private static List<String> packageNameList;
+    private static List<String> packageNameListValid;
+    private static List<String> packageNameListInValid;
     private static List<String> nodeBlackList;
     private static List<String> nodeWhiteList;
     private static List<String> nodeNameExcludeList;
@@ -204,13 +205,20 @@ public class XPathUtil {
             appName = ConfigUtil.getIOSBundleName().trim();
         }
 
-        packageNameList = new ArrayList<>(Arrays.asList(appName));
-
         //添加合法包名
+        packageNameListValid = new ArrayList<>(Arrays.asList(appName));
         if(Util.isAndroid(udid)){
-            packageNameList.addAll(ConfigUtil.getListValue(ConfigUtil.ANDROID_VALID_PACKAGE_LIST));
+            packageNameListValid.addAll(ConfigUtil.getListValue(ConfigUtil.ANDROID_VALID_PACKAGE_LIST));
         }else{
-            packageNameList.addAll(ConfigUtil.getListValue(ConfigUtil.IOS_VALID_BUNDLE_LIST));
+            packageNameListValid.addAll(ConfigUtil.getListValue(ConfigUtil.IOS_VALID_BUNDLE_LIST));
+        }
+        
+        //添加不合法包名
+        packageNameListInValid = new ArrayList<>();
+        if(Util.isAndroid(udid)){
+            packageNameListInValid.addAll(ConfigUtil.getListValue(ConfigUtil.ANDROID_INVALID_PACKAGE_LIST));
+        }else{
+        	packageNameListInValid.addAll(ConfigUtil.getListValue(ConfigUtil.IOS_INVALID_BUNDLE_LIST));
         }
 
         //黑名单
@@ -331,12 +339,21 @@ public class XPathUtil {
     //此时如果ignoreCrash=fasle, stop会被高成true，但不会重启app
     public static PackageStatus isValidPackageName(String packageName, boolean restart){
         log.info("Method: isValidPackageName");
-        PackageStatus isValid = PackageStatus.CRASHED;
+//        PackageStatus isValid = PackageStatus.CRASHED;
+        PackageStatus isValid = PackageStatus.UNKNOW;
 
         //判断当前包名是否合法
-        for(String name : packageNameList){
+        for(String name : packageNameListValid){
             if(null != packageName && packageName.contains(name)){
                 isValid = PackageStatus.VALID;
+                break;
+            }
+        }
+        
+        //判断当前包名是否Crash
+        for(String name : packageNameListInValid){
+            if(null != packageName && packageName.contains(name)){
+                isValid = PackageStatus.CRASHED;
                 break;
             }
         }
@@ -355,11 +372,11 @@ public class XPathUtil {
             }
 
             //程序未crash时 说明只是跳出了当前app 把isValid设成true,重启app即可
-            if(Util.isProcessExist(ConfigUtil.getUdid(),processName)){
+            if((Util.isProcessExist(ConfigUtil.getUdid(),processName)) && (isValid != PackageStatus.CRASHED)){
                 isValid = PackageStatus.APP_RESTART;
                 if(pressBackPackageList.contains(packageName)){
                     isValid = PackageStatus.PRESS_BACK;
-                    log.info("Package name :" + packageName + "is in pressBackList, so press back key");
+                    log.info("Package name :" + packageName + " is in pressBackList, so press back key");
                     Driver.takesScreenShotAndPressBack(repoStep);
                 }
             }else{
@@ -368,7 +385,7 @@ public class XPathUtil {
                 isValid = PackageStatus.CRASHED;
                 Util.renameAndCopyCrashFile(pic);
                 Driver.takeScreenShot();
-                log.error("===================app crashed!!!");
+                log.error("======================================================app crashed!!!");
             }
 
             if((isValid == PackageStatus.APP_RESTART || !stop) && restart) {
@@ -377,7 +394,7 @@ public class XPathUtil {
             }
         }
 
-        log.info(packageName + ": isValid=" + isValid);
+        log.info(packageName + ": isValid=" + isValid + ": restart=" + restart);
 
         return isValid;
     }

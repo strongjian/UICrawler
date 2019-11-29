@@ -84,7 +84,9 @@ public class ConfigUtil {
 
     //LIST
     public static final String ANDROID_VALID_PACKAGE_LIST = "ANDROID_VALID_PACKAGE_LIST";
+    public static final String ANDROID_INVALID_PACKAGE_LIST = "ANDROID_INVALID_PACKAGE_LIST";
     public static final String IOS_VALID_BUNDLE_LIST = "IOS_VALID_BUNDLE_LIST";
+    public static final String IOS_INVALID_BUNDLE_LIST = "IOS_INVALID_BUNDLE_LIST";
     public static final String ITEM_BLACKLIST = "ITEM_BLACKLIST";
     public static final String ITEM_WHITE_LIST = "ITEM_WHITE_LIST";
     public static final String NODE_NAME_EXCLUDE_LIST = "NODE_NAME_EXCLUDE_LIST";

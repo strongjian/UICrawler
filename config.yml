@@ -79,12 +79,14 @@ LIST:
   - com.android.settings
   - com.tencent.mm
   - com.android.camera
+  - com.android.incallui
 
   #当前遇到以下Activity时 触发back键 (Android only)
   PRESS_BACK_ACTIVITY_LIST:
   - .mvp.servicecenter.view.ServiceCenterMapDetailActivity
   - activity.SobotChatActivity
   - com.android.internal.app.ResolverActivity
+  - .main.h5.ShopAdvertiseH5Activity
 
   #待输入文本的控制类型
   INPUT_CLASS_LIST:
@@ -105,21 +107,29 @@ LIST:
   - com.lbe.security.miui
   - gallery
   - packageinstaller
+  
+  #遇到以下包名，判断app已crash。优先于ANDROID_VALID_PACKAGE_LIST
+  ANDROID_INVALID_PACKAGE_LIST:
+  - com.miui.home
 
   #同ANDROID_VALID_PACKAGE_LIST
   IOS_VALID_BUNDLE_LIST:
   - 照片
+
+#  IOS_INVALID_BUNDLE_LIST:
+#  - 无
 
   #白名单，遇到包含以下文本的控件，会多次点击（默认所有控件只点一次）
   ITEM_WHITE_LIST:
   - 确定
   - 我知道了
   - 已阅
-#  - 允许
-#  - 退出
-#  - 取消
-#  - 已解决
-#  - 提交
+  - 退出
+  - 返回
+  - 取消
+  - 提交
+  - 允许
+  - 已解决
 
   #不点击包含以下文本的控件
   ITEM_BLACKLIST:
@@ -148,7 +158,10 @@ LIST:
   - 确认要货
   - 水印相机
   - vConsole
+  - 相册
   - '//*[@text="18321402638"]'
+  - '//android.widget.ImageView[@resource-id="cn.tuhu.merchant:id/iv_kefu"]'
+  - '//android.widget.ImageView[@resource-id="cn.tuhu.merchant:id/iv_call_number"]'
 
   #不点击以下类型控件及其子元素
   IOS_EXCLUDE_BAR:
