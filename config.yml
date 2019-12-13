@@ -127,7 +127,6 @@ LIST:
   - 退出
   - 返回
   - 取消
-  - 提交
   - 允许
   - 已解决
 
@@ -159,7 +158,7 @@ LIST:
   - 水印相机
   - vConsole
   - 相册
-  - '//*[@text="18321402638"]'
+  - '//*[text()="18321402638"]'
   - '//android.widget.ImageView[@resource-id="cn.tuhu.merchant:id/iv_kefu"]'
   - '//android.widget.ImageView[@resource-id="cn.tuhu.merchant:id/iv_call_number"]'
 
