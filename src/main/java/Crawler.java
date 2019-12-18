@@ -23,7 +23,7 @@ public class Crawler {
     private static String outputDir;
     
     private static String defaultConfigFile = "config.yml";
-    private static String defaultUdid = "9e979099";	//ae5c3047  RKK0218515000915 9e979099
+    private static String defaultUdid = "a1707ef6e4e00b45ccfe2a401e352ac74541081b";	//ae5c3047  RKK0218515000915 9e979099 a1707ef6e4e00b45ccfe2a401e352ac74541081b
 
     private static class CtrlCHandler extends Thread{
         @Override

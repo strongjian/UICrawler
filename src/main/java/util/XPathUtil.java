@@ -418,17 +418,23 @@ public class XPathUtil {
                 clickedActivityMap.put(activityName,clickCount);
                 log.info("clickedActivityMap = " + clickedActivityMap.toString());
             }
+            
+            int x, y;
+            if(Util.isAndroid()){
+                String bounds = elem.toString();	//@bounds="[636,1586][714,1639]
+                int start = bounds.indexOf("@bounds=\"[");
+                int end  = bounds.indexOf("][");
+                String leftTop = bounds.substring(start+10,end); //636,1586
+                int split = leftTop.indexOf(",");
+                x = Integer.parseInt(leftTop.substring(0, split));
+                y = Integer.parseInt(leftTop.substring(split+1));
+            }
+            else {
+                //Sometimes, UIA2 will throw StaleObjectException Exception here
+            	x = elem.getCenter().getX();
+            	y = elem.getCenter().getY();
+            }
 
-            //Sometimes, UIA2 will throw StaleObjectException Exception here
-//            int x = elem.getCenter().getX();
-//            int y = elem.getCenter().getY();
-            String bounds = elem.toString();	//@bounds="[636,1586][714,1639]
-            int start = bounds.indexOf("@bounds=\"[");
-            int end  = bounds.indexOf("][");
-            String leftTop = bounds.substring(start+10,end); //636,1586
-            int split = leftTop.indexOf(",");
-            int x = Integer.parseInt(leftTop.substring(0, split));
-            int y = Integer.parseInt(leftTop.substring(split+1));
             pic = PictureUtil.takeAndModifyScreenShot(x*scale,y*scale);
 
             //String appName;

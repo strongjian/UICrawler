@@ -95,6 +95,7 @@ appium --session-override -p 4723
 java -jar UICrawler.jar -f config.yml -u RKK0218515000915 -t 4723
 java -jar UICrawler.jar -f config.yml -u ae5c3047 -t 4723
 java -jar UICrawler.jar -f config.yml -u 9e979099 -t 4723
+java -jar UICrawler.jar -f config-ios.yml -u a1707ef6e4e00b45ccfe2a401e352ac74541081b -t 4723
 java -jar UICrawler.jar -f config.yml -u RKK0218515000915 -s 172.16.12.15 -t 4723
 
 -u 指定设备udid
