@@ -974,6 +974,13 @@ public final class Driver {
             pressKeyCode(AndroidKey.BACK);
         }else{
             swipeHorizontally(true);
+            //解决ios拍照无法返回问题
+            try {
+            	WebElement btnReturn = driver.findElement(By.xpath("//XCUIElementTypeButton[@name=\"返回\"]"));
+            	btnReturn.click();
+                log.info("点击返回成功");
+            }catch (Exception e){
+            }
         }
 
         Driver.sleep(1);

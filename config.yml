@@ -7,8 +7,8 @@ CRITICAL_ELEMENT:
 #  RUN_IN_WECHAT_MINI_PROGRAM_MODE: false
 
   #Android App测试时，需指定App包名和启动的Activity
-#  ANDROID_PACKAGE: cn.tuhu.merchant
-#  ANDROID_MAIN_ACTIVITY: cn.tuhu.merchant.login.StartUpActivity
+  ANDROID_PACKAGE: cn.tuhu.merchant
+  ANDROID_MAIN_ACTIVITY: cn.tuhu.merchant.login.StartUpActivity
 
 #  #iOS App测试时需指定以下内容
   IOS_BUNDLE_ID: com.tuhu.cn.tuhushop
@@ -19,12 +19,12 @@ CRITICAL_ELEMENT:
 
   #构建XPATH需要的一些内容,UI底部TabBar 多个id时用or拼接 如'@resource-id="id1" or @resource-id="id2"'
 #  ANDROID_BOTTOM_TAB_BAR_ID: '@resource-id="cn.tuhu.merchant:id/tv_main_menu"'
-#  ANDROID_BOTTOM_TAB_BAR_ID: '@class="android.widget.RelativeLayout"]//*[@resource-id="cn.tuhu.merchant:id/tv_main_menu"'
+  ANDROID_BOTTOM_TAB_BAR_ID: '@class="android.widget.RelativeLayout"]//*[@resource-id="cn.tuhu.merchant:id/tv_main_menu"'
   IOS_BOTTOM_TAB_BAR_TYPE: XCUIElementTypeTabBar
 
   #通过xpath指定要点击的元素范围 注意值要加引号''
 #  ANDROID_CLICK_XPATH_HEADER: '@displayed="true" and string-length(@text)>0 and string-length(@text)<30'
-#  ANDROID_CLICK_XPATH_HEADER: '@clickable="true"'
+  ANDROID_CLICK_XPATH_HEADER: '@clickable="true"'
   IOS_CLICK_XPATH_HEADER: '@visible="true" and string-length(@value)<30'
 
 
@@ -32,13 +32,13 @@ CRITICAL_ELEMENT:
 #如果不需要自动登录功能以下值不需要修改
 LOGIN_ELEMENTS:
   #Android 登录相关元素及操作
-#  LOGIN_ELEMENTS_ANDROID:
-#  - ANDROID_SELECT_ENV_TUHUTEST:
-#      XPATH: '//*[@text = "tuhutest免登陆"]'
-#      ACTION: click
-#  - ANDOIRD_SELECT_SHOP:
-#      XPATH: '(//*[@resource-id="cn.tuhu.merchant:id/bt_select_store"])[1]'
-#      ACTION: click
+  LOGIN_ELEMENTS_ANDROID:
+  - ANDROID_SELECT_ENV_TUHUTEST:
+      XPATH: '//*[@text = "tuhutest免登陆"]'
+      ACTION: click
+  - ANDOIRD_SELECT_SHOP:
+      XPATH: '(//*[@resource-id="cn.tuhu.merchant:id/bt_select_store"])[1]'
+      ACTION: click
 
   #iOS登录相关元素及操作
   LOGIN_ELEMENTS_IOS:
@@ -51,6 +51,9 @@ LOGIN_ELEMENTS:
   - IOS_LOGIN_BUTTON:
       XPATH: '(//XCUIElementTypeButton[@name="进入"])[1]'
       ACTION: click
+#  - IOS_LOGIN_BUTTON:
+#      XPATH: '//XCUIElementTypeStaticText[@name="到店记录"]'
+#      ACTION: click
 #  - IOS_USERNAME:
 #      XPATH: '//*[@type="XCUIElementTypeTextField"]'
 #      ACTION: input
@@ -85,11 +88,11 @@ LIST:
   - com.android.incallui
 
   #当前遇到以下Activity时 触发back键 (Android only)
-#  PRESS_BACK_ACTIVITY_LIST:
-#  - .mvp.servicecenter.view.ServiceCenterMapDetailActivity
-#  - activity.SobotChatActivity
-#  - com.android.internal.app.ResolverActivity
-#  - .main.h5.ShopAdvertiseH5Activity
+  PRESS_BACK_ACTIVITY_LIST:
+  - .mvp.servicecenter.view.ServiceCenterMapDetailActivity
+  - activity.SobotChatActivity
+  - com.android.internal.app.ResolverActivity
+  - .main.h5.ShopAdvertiseH5Activity
 
   #待输入文本的控制类型
   INPUT_CLASS_LIST:
@@ -104,16 +107,16 @@ LIST:
 #  - 'ABC'
 
   #除了APP本身的包名外 根据以下包名判断是否跳出了APP,当app跳转到以下app时被认为是合法，会继续遍历操作
-#  ANDROID_VALID_PACKAGE_LIST:
-#  - com.miui.securitycenter
-#  - com.android.server.telecom
-#  - com.lbe.security.miui
-#  - gallery
-#  - packageinstaller
+  ANDROID_VALID_PACKAGE_LIST:
+  - com.miui.securitycenter
+  - com.android.server.telecom
+  - com.lbe.security.miui
+  - gallery
+  - packageinstaller
   
   #遇到以下包名，判断app已crash。优先于ANDROID_VALID_PACKAGE_LIST
-#  ANDROID_INVALID_PACKAGE_LIST:
-#  - com.miui.home
+  ANDROID_INVALID_PACKAGE_LIST:
+  - com.miui.home
 
   #同ANDROID_VALID_PACKAGE_LIST
   IOS_VALID_BUNDLE_LIST:
@@ -122,14 +125,14 @@ LIST:
 #  IOS_INVALID_BUNDLE_LIST:
 #  - 无
 
-  #白名单，遇到包含以下文本的控件，会多次点击（默认所有控件只点一次）
+  #白名单，遇到包含以下文本的控件，会多次点击（同一页面，默认所有控件只点一次）
   ITEM_WHITE_LIST:
   - 确定
   - 我知道了
   - 已阅
   - 退出
   - 返回
-  - 取消
+#  - 取消，这里会导致死循环
   - 允许
   - 已解决
 
@@ -164,6 +167,9 @@ LIST:
   - '//*[text()="18321402638"]'
   - '//android.widget.ImageView[@resource-id="cn.tuhu.merchant:id/iv_kefu"]'
   - '//android.widget.ImageView[@resource-id="cn.tuhu.merchant:id/iv_call_number"]'
+  - '//XCUIElementTypeButton[@name="fr photo black"]'
+  - '//XCUIElementTypeButton[@name="take pic btn"]'
+  - '//XCUIElementTypeButton[@name="scan iocn 18"]'
 
   #不点击以下类型控件及其子元素
   IOS_EXCLUDE_BAR:
@@ -180,8 +186,8 @@ LIST:
   - XCUIElementTypeApplication
 
   #不点击以下类型的元素
-#  ANDROID_EXCLUDE_TYPE:
-#  - android.widget.FrameLayout
+  ANDROID_EXCLUDE_TYPE:
+  - android.widget.FrameLayout
 
   #解释待续
   NODE_NAME_EXCLUDE_LIST:
